@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>county.js</title>
+
+		<meta charset="UTF-8" />
+		<link rel="stylesheet" href="county.css" />
+		<script src="./wanakana.min.js"></script>
+		<script src="./converty.js"></script>
+		<script src="./county.js"></script>
+	</head>
+	<body onload="loady()">
+		<div class="nav">
+			<div class="tab" id="tabList" onclick="openList()">list</div>
+			<div class="tab" id="tabOrder" onclick="openOrder()">order</div>
+			<div class="tab" id="tabRandom" onclick="openRandom()">random</div>
+		</div>
+
+		<div class="page" id="pageList">
+			<div class="counters" id="listCounters"></div>
+
+			<div class="info" id="listInfo">select a counter</div>
+
+			<table id="listTable">
+				<tbody></tbody>
+			</table>
+		</div>
+
+		<div class="page" id="pageOrder"></div>
+		<div class="page" id="pageRandom"></div>
+	</body>
+</html>
