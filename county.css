@@ -60,10 +60,10 @@ body {
 .tab {
 	width: calc(100%/3);
 
-	border-left: solid var(--colorA) 0.08em;
-	border-right: solid var(--colorA) 0.08em;
+	border-left: solid var(--colorA) 0.4vmin;
+	border-right: solid var(--colorA) 0.4vmin;
 
-	padding: 0.8em 0 0.6em 0;
+	padding: 3vmin 0 2vmin 0;
 
 	background-color: var(--colorC);
 
@@ -71,7 +71,7 @@ body {
 	align-items: center;
 	justify-content: center;
 
-	font-size: 1.875em;
+	font-size: 5vmin;
 	font-weight: 500;
 
 	user-select: none;
@@ -95,7 +95,7 @@ body {
 
 
 .page {
-	padding: 1.25em;
+	padding: 2vmin;
 
 	display: none;
 	flex-direction: column;
@@ -105,16 +105,21 @@ body {
 
 
 
-.counters {
-	margin-bottom: 2em;
+.countainer {
+	margin-bottom: 4vmin;
 	width: 100%;
 
-	padding: 0.625em;
-
-	border: solid var(--colorD) 0.1875em;
-	border-radius: 0.625em;
+	padding: 0.6vmin;
+	border: solid var(--colorD) 0.8vmin;
+	border-radius: 2vmin;
 
 	background-color: var(--colorA);
+}
+
+.counters {
+	margin: -1vmin;
+
+	padding: 1vmin;
 
 	display: flex;
 	flex-wrap: wrap;
@@ -124,19 +129,19 @@ body {
 }
 
 .counter {
-	margin-right: 0.5em;
+	margin: 1vmin;
 
-	width: 2em;
-	height: 2em;
+	width: 12vmin;
+	height: 12vmin;
 
-	border: solid var(--colorB) 0.1875em;
-	border-radius: 0.4em;
+	border: solid var(--colorB) 1vmin;
+	border-radius: 2vmin;
 
 	display: flex;
 	align-items: center;
 	justify-content: center;
 
-	font-size: 1.875em;
+	font-size: 5vmin;
 	font-weight: bold;
 
 	user-select: none;
@@ -161,18 +166,18 @@ body {
 
 
 .info {
-	font-size: 2.5em;
+	font-size: 8vmin;
 
-	margin-bottom: 0.5em;
+	margin-bottom: 6vmin;
 }
 
 table {
-	padding: 0.3125em 1.25em;
+	padding: 1vmin 3vmin;
 
 	min-width: 60%;
 
-	border: solid var(--colorD) 0.1875em;
-	border-radius: 0.625em;
+	border: solid var(--colorD) 0.8vmin;
+	border-radius: 2vmin;
 	border-spacing: 0;
 
 	background-color: var(--colorA);
@@ -189,15 +194,15 @@ tr:last-child * {
 }
 
 td {
-	padding: 0.3em 0;
+	padding: 2vmin 0;
 }
 
 .td-arabic {
-	padding-right: 0.625em; 
-	padding-left: 0.625em;
+	padding-right: 2vmin; 
+	padding-left: 2vmin;
 
 	text-align: center;
-	font-size: 1.25em;
+	font-size: 4vmin;
 	font-weight: bold;
 }
 
@@ -205,29 +210,12 @@ td {
 	min-width: 30%;
 
 	text-align: center;
-	font-size: 1.875em;
+	font-size: 6vmin;
 }
 
 .td-kana {
 	min-width: 50%;
 
 	text-align: center;
-	font-size: 1.875em;
-}
-
-button {
-	width: 12.5em;
-	height: 3.75em;
-
-	background-color: rgb(130, 130, 130);
-	border: solid rgb(239, 239, 239) 0.1875em;
-	border-radius: 0.625em;
-
-	font-size: 1.25em;
-	font-weight: bold;
-	color: rgb(44, 44, 44);
-}
-
-button:hover {
-	background-color: rgb(160, 160, 160);
+	font-size: 6vmin;
 }
