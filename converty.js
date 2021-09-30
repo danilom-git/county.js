@@ -20,6 +20,7 @@ _fourtens = [
 	{ kanji: "万", romaji: "man" },
 	{ kanji: "億", romaji: "oku" },
 	{ kanji: "兆", romaji: "tyou" },
+	{ kanji: "京", romaji: "kei" }
 ];
 
 _counters = [
@@ -84,24 +85,23 @@ _wordexcs = [
 	["二十歳", "hatati"],
 	["二十四日", "nijuuyokka"],
 	["二十四人", "nijuuyonin"],
+	// ｘ四日、ｘ四人、ｘ四時？
 ];
 
 __wordexcs = new Map(_wordexcs);
 
-_excs = [
+_countexcs = [
 	["一k", [[2, "k"], []]],
 	["一s", [[2, "s"], []]],
 	["一t", [[2, "t"], []]],
 	["一h", [[2, "p"], [1, "p"]]],
 	["一f", [[2, "p"], [1, "p"]]],
 	["一p", [[2, "p"], []]],
-	["三千", [[], [1, "z"]]],
 	["三h", [[], [1, "b"]]],
 	["三f", [[], [1, "p"]]],
 	["三w", [[], [1, "b"]]],
-	["四百", [[], []]],
-	["四h", [[], [1, "p"]]],
-	["四f", [[], [1, "p"]]],
+	["四h", [[], [1, "p"]]],	//？
+	["四f", [[], [1, "p"]]],	//？
 	["六k", [[2, "k"], []]],
 	["六h", [[2, "p"], [1, "p"]]],
 	["六f", [[2, "p"], [1, "p"]]],
@@ -114,8 +114,6 @@ _excs = [
 	["八f", [[2, "p"], [1, "p"]]],
 	["八p", [[2, "p"], []]],
 	["八w", [[2, "p"], [1, "p"]]],
-	["十三", [[], []]],
-	["十八", [[], []]],
 	["十k", [[1, "k"], []]],
 	["十s", [[1, "s"], []]],
 	["十t", [[1, "t"], []]],
@@ -123,22 +121,39 @@ _excs = [
 	["十f", [[1, "p"], [1, "p"]]],
 	["十p", [[1, "p"], []]],
 	["十w", [[2, "ip"], [1, "p"]]],
-	["百八", [[], []]],
 	["百k", [[1, ""], []]],
 	["百h", [[2, "p"], [1, "p"]]],
 	["百f", [[2, "p"], [1, "p"]]],
 	["百p", [[2, "p"], []]],
-	["千八", [[], []]],
 	["千h", [[], [1, "b"]]],
 	["千f", [[], [1, "p"]]],
-	["万八", [[], []]],
 	["万h", [[], [1, "b"]]],
 	["万f", [[], [1, "p"]]],
 	["何h", [[1, ""], [1, "b"]]],
 	["何f", [[1, ""], [1, "p"]]],
 ];
 
-__excs = new Map(_excs);
+__countexcs = new Map(_countexcs);
+
+_numexcs = [
+	["一百", [[2, "p"], [1, "p"]]],
+	["一千", [[2, "s"], []]],
+	["一兆", [[2, "t"], []]],
+	["一京", [[2, "k"], []]],
+	["三百", [[], [1, "b"]]],
+	["三千", [[], [1, "z"]]],
+	["六百", [[2, "p"], [1, "p"]]],
+	["六京", [[2, "k"], []]],
+	["八百", [[2, "p"], [1, "p"]]],
+	["八千", [[2, "s"], []]],
+	["八兆", [[2, "t"], []]],
+	["八京", [[2, "k"], []]],
+	["十兆", [[1, "c"], []]],
+	["十京", [[1, "k"], []]],
+	["百京", [[2, "k"], []]],
+];
+
+__numexcs = new Map(_numexcs);
 
 function ce(str, len, rep) {
 	return str.slice(0, -len) + rep;
@@ -195,24 +210,33 @@ function convert(arabic, counter) {
 		}
 	}
 
-	if (fcounter)
-		info.push(fcounter);
-
 	let kanji = info.reduce((a, b) => a + b.kanji, "");
+	if (fcounter)
+		kanji += fcounter.kanji;
 
-	let romaji = __wordexcs.get(info.reduce((a, b) => a + b.kanji, ""));
+	let romaji = __wordexcs.get(kanji);
 	
 	if (!romaji) {
 		romaji = info[0].romaji;
+
 		for (let i = 0; i < info.length - 1; ++i) {
-			let mp = __excs.get(info[i].kanji + info[i + 1].kanji);
-			if (!mp)
-				mp = __excs.get(info[i].kanji + info[i + 1].romaji[0]);
+			let mp = __numexcs.get(info[i].kanji + info[i + 1].kanji);
 			
 			if (mp)
 				romaji = merge(romaji, info[i + 1].romaji, mp);
 			else
 				romaji += info[i + 1].romaji;
+		}
+
+		if (fcounter) {
+			let mp = __countexcs.get(info[info.length - 1].kanji + fcounter.kanji[0]);
+			if (!mp)
+				mp = __countexcs.get(info[info.length - 1].kanji + fcounter.romaji[0]);
+
+			if (mp)
+				romaji = merge(romaji, fcounter.romaji, mp);
+			else
+				romaji += fcounter.romaji;
 		}
 	}
 
