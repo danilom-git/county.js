@@ -8,27 +8,44 @@
 		<script src="./wanakana.min.js"></script>
 		<script src="./converty.js"></script>
 		<script src="./county.js"></script>
+		<link rel="icon" href="favicon.ico"/>
 	</head>
 	<body onload="loady()">
-		<div class="nav">
-			<div class="tab" id="tabList" onclick="openList()">list</div>
-			<div class="tab" id="tabOrder" onclick="openOrder()">order</div>
-			<div class="tab" id="tabRandom" onclick="openRandom()">random</div>
-		</div>
-
-		<div class="page" id="pageList">
-			<div class="countainer">
-				<div class="counters" id="listCounters"></div>
+		<div id="fullscreen">
+			<div class="nav">
+				<button class="tab" id="tabList" onclick="openList()">list</button>
+				<button class="tab" id="tabOrder" onclick="openOrder()">order</button>
+				<button class="tab" id="tabRandom" onclick="openRandom()">random</button>
 			</div>
 
-			<div class="info" id="listInfo">select a counter</div>
+			<div class="page" id="pageList">
+				<div class="countainer">
+					<div class="counters" id="listCounters"></div>
+				</div>
 
-			<table id="listTable">
-				<tbody></tbody>
-			</table>
+				<div class="info" id="listInfo">select a counter</div>
+
+				<table id="listTable">
+					<tbody></tbody>
+				</table>
+			</div>
+
+			<div class="page" id="pageOrder">
+				<div class="countainer">
+					<div class="counters" id="orderCounters"></div>
+				</div>
+
+				<div class="info" id="orderInfo">select a counter</div>
+
+				<div class="answer" id="orderAnswer">
+					<div id="orderKanji"></div>
+					<div id="orderKana"></div>
+				</div>
+
+				<button class="next" id="orderNext" onclick="nextOrder()">start</button>
+			</div>
+
+			<div class="page" id="pageRandom"></div>
 		</div>
-
-		<div class="page" id="pageOrder"></div>
-		<div class="page" id="pageRandom"></div>
 	</body>
 </html>
