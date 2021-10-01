@@ -1,9 +1,19 @@
+var selectedTab;
+var selectedPage;
+
 var listSelected;
 
 var orderSelected;
-
 var orderIndex;
 var orderNumber;
+
+var _pageRandom = {
+	// [n, q, a]
+	phase: "n",
+	currentNumber: undefined,
+	currentCounter: undefined,
+	selectedCounters: [],
+}
 
 function loady() {
 	fullscreen = document.getElementById("fullscreen")
@@ -11,10 +21,12 @@ function loady() {
 	pageList = document.getElementById("pageList");
 	pageOrder = document.getElementById("pageOrder");
 	pageRandom = document.getElementById("pageRandom");
+	pageTranslate = document.getElementById("pageTranslate");
 	
 	tabList = document.getElementById("tabList");
 	tabOrder = document.getElementById("tabOrder");
 	tabRandom = document.getElementById("tabRandom");
+	tabTranslate = document.getElementById("tabTranslate");
 	
 	listInfo = document.getElementById("listInfo");
 	listTable = document.getElementById("listTable");
@@ -24,6 +36,13 @@ function loady() {
 	orderKanji = document.getElementById("orderKanji");
 	orderKana = document.getElementById("orderKana");
 	orderNext = document.getElementById("orderNext");
+
+	randomInfo = document.getElementById("randomInfo");
+	randomQuestion = document.getElementById("randomQuestion");
+	randomAnswer = document.getElementById("randomAnswer");
+	randomKanji = document.getElementById("randomKanji");
+	randomKana = document.getElementById("randomKana");
+	randomNext = document.getElementById("randomNext");
 
 	counters = [
 		{ kanji: "人", kana: "にん", descr: "number of people" },
@@ -61,6 +80,7 @@ function loady() {
 
 	let listCounters = document.getElementById("listCounters");
 	let orderCounters = document.getElementById("orderCounters");
+	let randomCounters = document.getElementById("randomCounters");
 	counters.forEach((counter, index) => {
 		let ele = document.createElement("button");
 		ele.id = `listCounter${index}`;
@@ -78,20 +98,32 @@ function loady() {
 		ele.onclick = () => startOrder(index);
 
 		orderCounters.appendChild(ele);
+
+
+		ele = document.createElement("button");
+		ele.id = `randomCounter${index}`;
+		ele.textContent = counter.kanji;
+		ele.classList.add("counter");
+		ele.onclick = () => randomCounter(index);
+
+		randomCounters.appendChild(ele);
 	});
 
 	openList();
-	openListCounter(0);
+	//openListCounter(0);
 }
 
 function openList() {
-	pageList.style.display = "flex";
-	pageOrder.style.display = "none";
-	pageRandom.style.display = "none";
+	if (selectedTab)
+		selectedTab.classList.remove("tab-active");
+	if (selectedPage)
+		selectedPage.style.display = "none";
 
-	tabList.classList.add("tab-active");
-	tabOrder.classList.remove("tab-active");
-	tabRandom.classList.remove("tab-active");
+	selectedTab = tabList;
+	selectedPage = pageList;
+
+	selectedTab.classList.add("tab-active");
+	selectedPage.style.display = "flex";
 }
 
 
@@ -142,13 +174,16 @@ function openListCounter(index) {
 
 
 function openOrder() {
-	pageList.style.display = "none";
-	pageOrder.style.display = "flex";
-	pageRandom.style.display = "none";
+	if (selectedTab)
+		selectedTab.classList.remove("tab-active");
+	if (selectedPage)
+		selectedPage.style.display = "none";
 
-	tabList.classList.remove("tab-active");
-	tabOrder.classList.add("tab-active");
-	tabRandom.classList.remove("tab-active");
+	selectedTab = tabOrder;
+	selectedPage = pageOrder;
+
+	selectedTab.classList.add("tab-active");
+	selectedPage.style.display = "flex";
 }
 
 function startOrder(index) {
@@ -190,11 +225,119 @@ function nextOrder() {
 }
 
 function openRandom() {
-	pageList.style.display = "none";
-	pageOrder.style.display = "none";
-	pageRandom.style.display = "flex";
+	if (selectedTab)
+		selectedTab.classList.remove("tab-active");
+	if (selectedPage)
+		selectedPage.style.display = "none";
 
-	tabList.classList.remove("tab-active");
-	tabOrder.classList.remove("tab-active");
-	tabRandom.classList.add("tab-active");
+	selectedTab = tabRandom;
+	selectedPage = pageRandom;
+
+	selectedTab.classList.add("tab-active");
+	selectedPage.style.display = "flex";
+}
+
+function randomCounter(index) {
+	let me = document.getElementById(`randomCounter${index}`);
+
+	let i;
+	for (i = 0; i < _pageRandom.selectedCounters.length; ++i)
+		if (_pageRandom.selectedCounters[i] === index)
+			break;
+	
+	if (i === _pageRandom.selectedCounters.length) {
+		_pageRandom.selectedCounters.push(index);
+		me.classList.add("counter-active");
+	} else {
+		_pageRandom.selectedCounters.splice(i, 1);
+		me.classList.remove("counter-active");
+	}
+
+	if (_pageRandom.phase === "n") {
+		if (_pageRandom.selectedCounters.length === 0) {
+			randomInfo.textContent = "select counters";
+			randomNext.style.display = "none";
+		} else {
+			randomInfo.textContent = "go!!1";
+			randomNext.textContent = "start";
+			randomNext.style.display = "flex";
+		}
+	}
+}
+
+function nextRandom() {
+	if (_pageRandom.phase === "n") {
+		if (_pageRandom.selectedCounters.length === 0)
+			return;
+
+		_pageRandom.phase = "q";
+		
+		_pageRandom.currentNumber = Math.floor(Math.random() * (10000 - 0)) + 0;
+		_pageRandom.currentCounter = counters[_pageRandom.selectedCounters[Math.floor(Math.random() * _pageRandom.selectedCounters.length)]].kanji;
+
+		randomQuestion.style.visibility = "visible";
+		randomQuestion.textContent = _pageRandom.currentNumber + "　+　" + _pageRandom.currentCounter;
+
+		randomAnswer.style.visibility = "visible";
+		randomKanji.style.fontSize = "12vmin";
+		randomKanji.textContent = "？";
+		randomKana.textContent = "";
+
+		randomInfo.style.display = "none";
+
+		randomNext.textContent = "answer";
+	} else if (_pageRandom.phase === "q") {
+		_pageRandom.phase = "a";
+
+		let converted = convert(_pageRandom.currentNumber, _pageRandom.currentCounter);
+
+		randomKanji.textContent = converted.kanji;
+		randomKanji.style.fontSize = Math.min(8, Math.floor(86 / converted.kanji.length)) + "vw";
+
+		randomKana.textContent = converted.kana;
+		randomKana.style.fontSize = Math.min(8, Math.floor(86 / converted.kana.length)) + "vw";
+
+		randomNext.innerHTML = "next";
+	} else if (_pageRandom.phase === "a") {
+		if (_pageRandom.selectedCounters.length === 0) {
+			_pageRandom.phase = "n";
+
+			randomInfo.textContent = "select counters";
+			randomInfo.style.display = "block";
+
+			randomQuestion.style.visibility = "hidden";
+			randomAnswer.style.visibility = "hidden";
+			randomNext.style.display = "none";
+
+			return;
+		}
+
+		_pageRandom.phase = "q";
+		
+		_pageRandom.currentNumber = Math.floor(Math.random() * (10000 - 0)) + 0;
+		_pageRandom.currentCounter = counters[_pageRandom.selectedCounters[Math.floor(Math.random() * _pageRandom.selectedCounters.length)]].kanji;
+
+		randomQuestion.style.visibility = "visible";
+		randomQuestion.textContent = _pageRandom.currentNumber + "　+　" + _pageRandom.currentCounter;
+
+		randomAnswer.style.visibility = "visible";
+		randomKanji.fontSize = "12vmin";
+		randomKanji.textContent = "？";
+		randomKana.textContent = "";
+
+		randomNext.textContent = "answer";
+	}
+}
+
+function openTranslate() {
+	if (selectedTab)
+		selectedTab.classList.remove("tab-active");
+	if (selectedPage)
+		selectedPage.style.display = "none";
+
+	selectedTab = tabTranslate;
+	selectedPage = pageTranslate;
+
+	selectedTab.classList.add("tab-active");
+	selectedPage.style.display = "flex";
 }

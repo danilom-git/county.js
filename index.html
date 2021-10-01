@@ -16,9 +16,10 @@
 	<body onload="loady()">
 		<div id="fullscreen">
 			<div class="nav">
-				<button class="tab" id="tabList" onclick="openList()">list</button>
-				<button class="tab" id="tabOrder" onclick="openOrder()">order</button>
-				<button class="tab" id="tabRandom" onclick="openRandom()">random</button>
+				<button class="tab" id="tabList" onclick="openList()">. . .</button>
+				<button class="tab" id="tabOrder" onclick="openOrder()">1 2 3</button>
+				<button class="tab" id="tabRandom" onclick="openRandom()">x y z</button>
+				<button class="tab" id="tabTranslate" onclick="openTranslate()">n = ?</button>
 			</div>
 
 			<div class="page" id="pageList">
@@ -48,7 +49,24 @@
 				<button class="next" id="orderNext" onclick="nextOrder()">start</button>
 			</div>
 
-			<div class="page" id="pageRandom"></div>
+			<div class="page" id="pageRandom">
+				<div class="countainer">
+					<div class="counters" id="randomCounters"></div>
+				</div>
+
+				<div class="info" id="randomInfo">select counters</div>
+
+				<div class="question" id="randomQuestion"></div>
+
+				<div class="answer" id="randomAnswer">
+					<div id="randomKanji"></div>
+					<div id="randomKana"></div>
+				</div>
+
+				<button class="next" id="randomNext" onclick="nextRandom()">start</button>
+			</div>
+
+			<div class="page" id="pageTranslate">dafak</div>
 		</div>
 	</body>
 </html>

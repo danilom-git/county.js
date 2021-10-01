@@ -44,7 +44,7 @@ body {
 	z-index: -1;
 	
 	user-select: none;
-	color: rgba(239, 239, 239, 0.03);
+	color: rgba(239, 239, 239, 0.05);
 }
 
 
@@ -54,48 +54,55 @@ body {
 	top: 0;
 	left: 0;
 
+	width: 100%;
+
+	border-radius: 0 0 2vmin 2vmin;
+
 	display: flex;
 	flex-direction: row;
 	align-items: stretch;
-	justify-content: flex-start;
+	justify-content: space-between;
 
-	width: 100%;
+	background-image: linear-gradient(to bottom, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0));
 }
 
 .tab {
-	width: calc(100%/3);
+	margin: 2vmin;
 
-	border-left: solid var(--colorA) 0.4vmin;
-	border-right: solid var(--colorA) 0.4vmin;
+	width: 20%;
+	max-width: 25%;
+	height: 10vmin;
 
-	padding: 3vmin 0 2vmin 0;
+	border: solid var(--colorB) 0.3vmin;
+	border-radius: 2vmin;
 
-	background-color: var(--colorC);
+	background-color: var(--colorA);
 
 	display: flex;
 	align-items: center;
 	justify-content: center;
 
 	font-size: 5vmin;
-	font-weight: 500;
+	font-weight: 200;
 
 	user-select: none;
 
 	cursor: pointer;
 }
 
-.tab:hover {
+/* .tab:hover {
 	background-color: var(--colorD);
-}
+} */
 
 .tab-active {
-	background-color: var(--colorA);
+	background-color: rgb(0, 0, 0);
+	
 	cursor: unset;
 }
 
-.tab-active:hover {
+/* .tab-active:hover {
 	background-color: var(--colorA);
-}
+} */
 
 
 
@@ -157,9 +164,9 @@ body {
 	cursor: pointer;
 }
 
-.counter:hover {
+/* .counter:hover {
 	background-color: var(--colorC);
-}
+} */
 
 .counter-active {
 	color: var(--colorA);
@@ -167,9 +174,9 @@ body {
 	border: none;
 }
 
-.counter-active:hover {
+/* .counter-active:hover {
 	background-color: var(--colorE);
-}
+} */
 
 
 
@@ -234,6 +241,27 @@ td {
 	font-size: 6vmin;
 }
 
+.question {
+	margin-bottom: 6vmin;
+
+	width: 100%;
+
+	border: solid var(--colorD) 0.8vmin;
+	border-radius: 2vmin;
+
+	background-color: var(--colorA);
+
+	padding: 4vmin;
+
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+
+	visibility: hidden;
+
+	font-size: 8vmin;
+}
 
 .answer {
 	margin-bottom: 6vmin;
@@ -252,6 +280,10 @@ td {
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
+
+	visibility: hidden;
+
+	font-size: 8vmin;
 }
 
 .next {
@@ -264,7 +296,7 @@ td {
 
 	background-color: var(--colorA);
 
-	display: flex;
+	display: none;
 	align-items: center;
 	justify-content: center;
 
@@ -273,17 +305,9 @@ td {
 	cursor: pointer;
 }
 
-.next:hover {
+/* .next:hover {
 	background-color: var(--colorC);
-}
-
-#orderAnswer {
-	visibility: hidden;
-}
-
-#orderNext {
-	display: none;
-}
+} */
 
 button {
 	border: none;
@@ -292,6 +316,6 @@ button {
 	background-color: inherit;
 }
 
-button:hover {
+/* button:hover {
 	text-decoration: none;
-}
+} */
