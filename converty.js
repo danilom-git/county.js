@@ -13,7 +13,7 @@ _digits = [
 _tens = [
 	{ kanji: "十", romaji: "juu" },
 	{ kanji: "百", romaji: "hyaku" },
-	{ kanji: "千", romaji: "sen" },
+	{ kanji: "千", romaji: "sen'" },
 ];
 
 _fourtens = [
