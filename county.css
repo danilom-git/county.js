@@ -1,5 +1,5 @@
 :root {
-	--colorA: #2c2c2c;
+	--colorA: rgb(44, 44, 44);
 	--colorB: #efefef;
 	--colorC: rgb(80, 80, 80);
 	--colorD: rgb(120, 120, 120);
@@ -286,6 +286,11 @@ td {
 	font-size: 8vmin;
 }
 
+#translateAnswer {
+	visibility: visible;
+	margin-bottom: 0;
+}
+
 .next {
 	width: 100%;
 	min-height: 14vmin;
@@ -319,3 +324,36 @@ button {
 /* button:hover {
 	text-decoration: none;
 } */
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
+}
+
+input[type=number] {
+	appearance: textfield;
+
+	margin-bottom: 4vmin;
+
+	height: 10vmin;
+	min-width: 60%;
+
+	outline: none;
+
+	border: solid var(--colorB) 0.5vmin;
+	border-radius: 2vmin;
+
+	background-color: rgb(30, 30, 30);
+
+	padding: 3vmin 2vmin;
+
+	color: var(--colorB);
+
+	font-size: 5vmin;
+}
+
+input[type=number]:focus {
+	background-color: rgb(20, 20, 20);
+}
+

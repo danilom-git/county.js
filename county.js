@@ -7,12 +7,16 @@ var orderSelected;
 var orderIndex;
 var orderNumber;
 
-var _pageRandom = {
+var _pRandom = {
 	// [n, q, a]
 	phase: "n",
 	currentNumber: undefined,
 	currentCounter: undefined,
 	selectedCounters: [],
+}
+
+var _pTranslate = {
+	counterIndex: "",
 }
 
 function loady() {
@@ -43,6 +47,11 @@ function loady() {
 	randomKanji = document.getElementById("randomKanji");
 	randomKana = document.getElementById("randomKana");
 	randomNext = document.getElementById("randomNext");
+
+	translateInput = document.getElementById("translateInput")
+	translateAnswer = document.getElementById("translateAnswer");
+	translateKanji = document.getElementById("translateKanji");
+	translateKana = document.getElementById("translateKana");
 
 	counters = [
 		{ kanji: "人", kana: "にん", descr: "number of people" },
@@ -81,6 +90,7 @@ function loady() {
 	let listCounters = document.getElementById("listCounters");
 	let orderCounters = document.getElementById("orderCounters");
 	let randomCounters = document.getElementById("randomCounters");
+	let translateCounters = document.getElementById("translateCounters");
 	counters.forEach((counter, index) => {
 		let ele = document.createElement("button");
 		ele.id = `listCounter${index}`;
@@ -107,6 +117,15 @@ function loady() {
 		ele.onclick = () => randomCounter(index);
 
 		randomCounters.appendChild(ele);
+
+
+		ele = document.createElement("button");
+		ele.id = `translateCounter${index}`;
+		ele.textContent = counter.kanji;
+		ele.classList.add("counter");
+		ele.onclick = () => translateCounter(index);
+
+		translateCounters.appendChild(ele);
 	});
 
 	openList();
@@ -216,10 +235,10 @@ function nextOrder() {
 	orderAnswer.style.visibility = "visible";
 
 	orderKanji.textContent = converted.kanji;
-	orderKanji.style.fontSize = Math.min(8, Math.floor(86 / converted.kanji.length)) + "vw";
+	orderKanji.style.fontSize = Math.max(Math.min(8, Math.floor(86 / converted.kanji.length)), 4) + "vw";
 
 	orderKana.textContent = converted.kana;
-	orderKana.style.fontSize = Math.min(8, Math.floor(86 / converted.kana.length)) + "vw";
+	orderKana.style.fontSize = Math.max(Math.min(8, Math.floor(86 / converted.kana.length)), 4) + "vw";
 
 	orderNext.innerHTML = "next";
 }
@@ -241,24 +260,24 @@ function randomCounter(index) {
 	let me = document.getElementById(`randomCounter${index}`);
 
 	let i;
-	for (i = 0; i < _pageRandom.selectedCounters.length; ++i)
-		if (_pageRandom.selectedCounters[i] === index)
+	for (i = 0; i < _pRandom.selectedCounters.length; ++i)
+		if (_pRandom.selectedCounters[i] === index)
 			break;
 	
-	if (i === _pageRandom.selectedCounters.length) {
-		_pageRandom.selectedCounters.push(index);
+	if (i === _pRandom.selectedCounters.length) {
+		_pRandom.selectedCounters.push(index);
 		me.classList.add("counter-active");
 	} else {
-		_pageRandom.selectedCounters.splice(i, 1);
+		_pRandom.selectedCounters.splice(i, 1);
 		me.classList.remove("counter-active");
 	}
 
-	if (_pageRandom.phase === "n") {
-		if (_pageRandom.selectedCounters.length === 0) {
+	if (_pRandom.phase === "n") {
+		if (_pRandom.selectedCounters.length === 0) {
 			randomInfo.textContent = "select counters";
 			randomNext.style.display = "none";
 		} else {
-			randomInfo.textContent = "go!!1";
+			randomInfo.textContent = "ready";
 			randomNext.textContent = "start";
 			randomNext.style.display = "flex";
 		}
@@ -266,41 +285,41 @@ function randomCounter(index) {
 }
 
 function nextRandom() {
-	if (_pageRandom.phase === "n") {
-		if (_pageRandom.selectedCounters.length === 0)
+	if (_pRandom.phase === "n") {
+		if (_pRandom.selectedCounters.length === 0)
 			return;
 
-		_pageRandom.phase = "q";
+		_pRandom.phase = "q";
 		
-		_pageRandom.currentNumber = Math.floor(Math.random() * (10000 - 0)) + 0;
-		_pageRandom.currentCounter = counters[_pageRandom.selectedCounters[Math.floor(Math.random() * _pageRandom.selectedCounters.length)]].kanji;
+		_pRandom.currentNumber = Math.floor(Math.random() * (10000 - 0)) + 0;
+		_pRandom.currentCounter = counters[_pRandom.selectedCounters[Math.floor(Math.random() * _pRandom.selectedCounters.length)]].kanji;
 
 		randomQuestion.style.visibility = "visible";
-		randomQuestion.textContent = _pageRandom.currentNumber + "　+　" + _pageRandom.currentCounter;
+		randomQuestion.textContent = _pRandom.currentNumber + "　+　" + _pRandom.currentCounter;
 
 		randomAnswer.style.visibility = "visible";
 		randomKanji.style.fontSize = "12vmin";
-		randomKanji.textContent = "？";
+		randomKanji.textContent = "?";
 		randomKana.textContent = "";
 
 		randomInfo.style.display = "none";
 
 		randomNext.textContent = "answer";
-	} else if (_pageRandom.phase === "q") {
-		_pageRandom.phase = "a";
+	} else if (_pRandom.phase === "q") {
+		_pRandom.phase = "a";
 
-		let converted = convert(_pageRandom.currentNumber, _pageRandom.currentCounter);
+		let converted = convert(_pRandom.currentNumber, _pRandom.currentCounter);
 
 		randomKanji.textContent = converted.kanji;
-		randomKanji.style.fontSize = Math.min(8, Math.floor(86 / converted.kanji.length)) + "vw";
+		randomKanji.style.fontSize = Math.max(Math.min(8, Math.floor(86 / converted.kanji.length)), 4) + "vw";
 
 		randomKana.textContent = converted.kana;
-		randomKana.style.fontSize = Math.min(8, Math.floor(86 / converted.kana.length)) + "vw";
+		randomKana.style.fontSize = Math.max(Math.min(8, Math.floor(86 / converted.kana.length)), 4) + "vw";
 
 		randomNext.innerHTML = "next";
-	} else if (_pageRandom.phase === "a") {
-		if (_pageRandom.selectedCounters.length === 0) {
-			_pageRandom.phase = "n";
+	} else if (_pRandom.phase === "a") {
+		if (_pRandom.selectedCounters.length === 0) {
+			_pRandom.phase = "n";
 
 			randomInfo.textContent = "select counters";
 			randomInfo.style.display = "block";
@@ -312,17 +331,17 @@ function nextRandom() {
 			return;
 		}
 
-		_pageRandom.phase = "q";
+		_pRandom.phase = "q";
 		
-		_pageRandom.currentNumber = Math.floor(Math.random() * (10000 - 0)) + 0;
-		_pageRandom.currentCounter = counters[_pageRandom.selectedCounters[Math.floor(Math.random() * _pageRandom.selectedCounters.length)]].kanji;
+		_pRandom.currentNumber = Math.floor(Math.random() * (10000 - 0)) + 0;
+		_pRandom.currentCounter = counters[_pRandom.selectedCounters[Math.floor(Math.random() * _pRandom.selectedCounters.length)]].kanji;
 
 		randomQuestion.style.visibility = "visible";
-		randomQuestion.textContent = _pageRandom.currentNumber + "　+　" + _pageRandom.currentCounter;
+		randomQuestion.textContent = _pRandom.currentNumber + "　+　" + _pRandom.currentCounter;
 
 		randomAnswer.style.visibility = "visible";
 		randomKanji.fontSize = "12vmin";
-		randomKanji.textContent = "？";
+		randomKanji.textContent = "?";
 		randomKana.textContent = "";
 
 		randomNext.textContent = "answer";
@@ -340,4 +359,38 @@ function openTranslate() {
 
 	selectedTab.classList.add("tab-active");
 	selectedPage.style.display = "flex";
+}
+
+function translateCounter(index) {
+	if (_pTranslate.counterIndex !== "")
+		document.getElementById("translateCounter" + _pTranslate.counterIndex).classList.remove("counter-active");
+	
+	if (_pTranslate.counterIndex === index) {
+		_pTranslate.counterIndex = "";
+	} else {
+		_pTranslate.counterIndex = index;
+		document.getElementById("translateCounter" + _pTranslate.counterIndex).classList.add("counter-active");
+	}
+
+	drawTranslateAnswer();	
+}
+
+function drawTranslateAnswer() {
+	let arabic = Number(translateInput.value)
+	if (!arabic) {
+		translateKanji.textContent = "";
+		translateKana.textContent = "";
+		return;
+	}
+	
+	let counter = _pTranslate.counterIndex === "" ? "" : counters[_pTranslate.counterIndex];
+	let converted = convert(arabic, counter.kanji);
+
+	console.log(`convert(${arabic}, ${counter.kanji}) === ${converted.kanji}`);
+
+	translateKanji.textContent = converted.kanji;
+	translateKanji.style.fontSize = Math.max(Math.min(8, Math.floor(86 / converted.kanji.length)), 4) + "vw";
+
+	translateKana.textContent = converted.kana;
+	translateKana.style.fontSize = Math.max(Math.min(8, Math.floor(86 / converted.kana.length)), 4) + "vw";
 }

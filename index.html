@@ -66,7 +66,18 @@
 				<button class="next" id="randomNext" onclick="nextRandom()">start</button>
 			</div>
 
-			<div class="page" id="pageTranslate">dafak</div>
+			<div class="page" id="pageTranslate">
+				<div class="countainer">
+					<div class="counters" id="translateCounters"></div>
+				</div>
+
+				<input type="number" id="translateInput" placeholder="__φ(．．;)" oninput="drawTranslateAnswer()">
+
+				<div class="answer" id="translateAnswer">
+					<div id="translateKanji"></div>
+					<div id="translateKana"></div>
+				</div>
+			</div>
 		</div>
 	</body>
 </html>
