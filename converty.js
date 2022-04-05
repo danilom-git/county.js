@@ -1,4 +1,5 @@
 _digits = [
+	{ kanji: "何", romaji: "nan" },
 	{ kanji: "一", romaji: "iti" },
 	{ kanji: "二", romaji: "ni" },
 	{ kanji: "三", romaji: "san" },
@@ -40,52 +41,55 @@ _counters = [
 	{ kanji: "頭", romaji: "tou" },
 	{ kanji: "冊", romaji: "satu" },
 	{ kanji: "台", romaji: "dai" },
-	{ kanji: "枚", romaji: "mai"},
-	{ kanji: "話", romaji: "wa"},
-	{ kanji: "足", romaji: "soku"},
-	{ kanji: "軒", romaji: "ken"},
+	{ kanji: "枚", romaji: "mai" },
+	{ kanji: "話", romaji: "wa" },
+	{ kanji: "足", romaji: "soku" },
+	{ kanji: "軒", romaji: "ken" },
+	{ kanji: "羽", romaji: "wa" },
 ];
 
 _wordexcs = [
+	// ｘ四人、ｘ四時？
+
+	// ["一日", "tuitati"],
+	// ["二日", "futuka"],
+	// ["三日", "mikka"],
+	// ["四日", "yokka"],
+	// ["五日", "ituka"],
+	// ["六日", "muika"],
+	// ["七日", "nanoka"],
+	// ["八日", "youka"],
+	// ["九日", "kokonoka"],
+	// ["十日", "touka"],
+	// ["十四日", "juuyokka"],
+	// ["二十日", "hatuka"],
+	// ["二十四日", "nijuuyokka"],
+
 	["一つ", "hitotu"],
-	["一日", "tuitati"],
 	["一人", "hitori"],
 	["二つ", "futatsu"],
-	["二日", "futuka"],
 	["二人", "futari"],
 	["三つ", "mittu"],
-	["三日", "mikka"],
 	["四つ", "yottu"],
-	["四日", "yokka"],
 	["四人", "yonin"],
 	["四年", "yonen"],
 	["四月", "sigatu"],
 	["四時", "yoji"],
 	["五つ", "itutu"],
-	["五日", "ituka"],
 	["六つ", "muttu"],
-	["六日", "muika"],
 	["七つ", "nanatu"],
-	["七日", "nanoka"],
 	["七人", "sitinin"],
 	["七月", "sigatu"],
 	["七時", "sitiji"],
 	["八つ", "yattu"],
-	["八日", "youka"],
 	["九つ", "kokonotu"],
-	["九日", "kokonoka"],
 	["九月", "kugatu"],
 	["九時", "kuji"],
-	["十つ", "tou"],
-	["十日", "touka"],
-	["十四日", "juuyokka"],
+	["十つ", "tou"],	
 	["十四人", "juuyonin"],
 	["十四時", "juuyoji"],
-	["二十日", "hatuka"],
 	["二十歳", "hatati"],
-	["二十四日", "nijuuyokka"],
 	["二十四人", "nijuuyonin"],
-	// ｘ四日、ｘ四人、ｘ四時？
 ];
 
 __wordexcs = new Map(_wordexcs);
@@ -129,8 +133,8 @@ _countexcs = [
 	["千f", [[], [1, "p"]]],
 	["万h", [[], [1, "b"]]],
 	["万f", [[], [1, "p"]]],
-	["何h", [[1, ""], [1, "b"]]],
-	["何f", [[1, ""], [1, "p"]]],
+	["何h", [[], [1, "b"]]],
+	["何f", [[], [1, "p"]]],
 ];
 
 __countexcs = new Map(_countexcs);
@@ -177,36 +181,40 @@ function convert(arabic, counter) {
 			break;
 		}
 
-	let flipped = arabic.toString().split("").reverse();
-
 	let info = [];
 
-	let m = flipped.length - 1;
-	let nonzero = false;
-	if (
-		flipped[m] == 1 &&
-		m > 3 &&
-		(m % 4 == 0 || (m % 4 == 3 && flipped[m - 1] == 0 && flipped[m - 2] == 0))
-	) {
-		info.push(_digits[0]);
-		nonzero = true;
-	}
+	if (arabic == "?")
+		info.push(_digits[0])
+	else {
+		let flipped = arabic.toString().split("").reverse();
 
-	for (let i = flipped.length - 1; i >= 0; --i) {
-		if (flipped[i] == 0) {
-			if (i % 4 == 0 && i > 0) {
-				if (nonzero)
-					info.push(_fourtens[i / 4 - 1]);
-				nonzero = false;
+		let m = flipped.length - 1;
+		let nonzero = false;
+		if (
+			flipped[m] == 1 &&
+			m > 3 &&
+			(m % 4 == 0 || (m % 4 == 3 && flipped[m - 1] == 0 && flipped[m - 2] == 0))
+		) {
+			info.push(_digits[1]);
+			nonzero = true;
+		}
+
+		for (let i = flipped.length - 1; i >= 0; --i) {
+			if (flipped[i] == 0) {
+				if (i % 4 == 0 && i > 0) {
+					if (nonzero)
+						info.push(_fourtens[i / 4 - 1]);
+					nonzero = false;
+				}
+			} else {
+				nonzero = i % 4 != 0;
+
+				if (flipped[i] != 1 || i == 0)
+					info.push(_digits[flipped[i]]);
+
+				if (i > 0)
+					info.push(i % 4 == 0 ? _fourtens[i / 4 - 1] : _tens[i % 4 - 1]);
 			}
-		} else {
-			nonzero = i % 4 != 0;
-
-			if (flipped[i] != 1 || i == 0)
-				info.push(_digits[flipped[i] - 1]);
-
-			if (i > 0)
-				info.push(i % 4 == 0 ? _fourtens[i / 4 - 1] : _tens[i % 4 - 1]);
 		}
 	}
 

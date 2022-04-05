@@ -54,13 +54,15 @@ function loady() {
 	translateKana = document.getElementById("translateKana");
 
 	counters = [
+		{ kanji: "つ", kana: "つ", descr: "traditional" },
 		{ kanji: "人", kana: "にん", descr: "number of people" },
+		{ kanji: "日", kana: "にち", descr: "days" },
 		{ kanji: "本", kana: "ほん", descr: "long thin objects" },
 		{ kanji: "枚", kana: "まい", descr: "thin flat objects" },
 		{ kanji: "匹", kana: "ひき", descr: "small animals" },
 		{ kanji: "台", kana: "だい", descr: "mechanical devices" },
 		{ kanji: "冊", kana: "さつ", descr: "books" },
-		{ kanji: "話", kana: "わ", descr: "stories, episodes" },
+		{ kanji: "羽", kana: "わ", descr: "birds, rabbits" },
 		{ kanji: "足", kana: "そく", descr: "footwear" },
 		{ kanji: "軒", kana: "けん", descr: "houses" },
 	];
@@ -149,8 +151,12 @@ function openList() {
 function openListCounter(index) {
 	listTable.style.display = "table";
 
-	let arabic = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 100, 1000];
-	
+	let arabic = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+	if (counters[index].kanji !== "つ") {
+		arabic.splice(0, 0, "?")
+		arabic.push(100, 1000)
+	}
+
 	let me = document.getElementById(`listCounter${index}`);
 
 	let tbody = listTable.lastElementChild;
@@ -285,14 +291,30 @@ function randomCounter(index) {
 }
 
 function nextRandom() {
+	if (_pRandom.phase === "n" || _pRandom.phase === "a") {
+		let divider = Math.random();
+		let max_number = 0;
+		if (divider < 0.4)
+			max_number = 10000;
+		else if (divider < 0.7)
+			max_number = 100000;
+		else if (divider < 0.9)
+			max_number = 1000000;
+		else
+			max_number = 10000000;
+
+		console.log(divider);
+		console.log(max_number);
+
+		_pRandom.currentNumber = Math.floor(Math.random() * max_number);
+		_pRandom.currentCounter = counters[_pRandom.selectedCounters[Math.floor(Math.random() * _pRandom.selectedCounters.length)]].kanji;
+	}
+
 	if (_pRandom.phase === "n") {
 		if (_pRandom.selectedCounters.length === 0)
 			return;
 
 		_pRandom.phase = "q";
-		
-		_pRandom.currentNumber = Math.floor(Math.random() * (10000 - 0)) + 0;
-		_pRandom.currentCounter = counters[_pRandom.selectedCounters[Math.floor(Math.random() * _pRandom.selectedCounters.length)]].kanji;
 
 		randomQuestion.style.visibility = "visible";
 		randomQuestion.textContent = _pRandom.currentNumber + "　+　" + _pRandom.currentCounter;
@@ -332,9 +354,6 @@ function nextRandom() {
 		}
 
 		_pRandom.phase = "q";
-		
-		_pRandom.currentNumber = Math.floor(Math.random() * (10000 - 0)) + 0;
-		_pRandom.currentCounter = counters[_pRandom.selectedCounters[Math.floor(Math.random() * _pRandom.selectedCounters.length)]].kanji;
 
 		randomQuestion.style.visibility = "visible";
 		randomQuestion.textContent = _pRandom.currentNumber + "　+　" + _pRandom.currentCounter;
