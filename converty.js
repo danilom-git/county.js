@@ -46,6 +46,8 @@ _counters = [
 	{ kanji: "足", romaji: "soku" },
 	{ kanji: "軒", romaji: "ken" },
 	{ kanji: "羽", romaji: "wa" },
+	{ kanji: "円", romaji: "en" },
+	{ kanji: "杯", romaji: "hai"},
 ];
 
 _wordexcs = [

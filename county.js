@@ -65,6 +65,8 @@ function loady() {
 		{ kanji: "羽", kana: "わ", descr: "birds, rabbits" },
 		{ kanji: "足", kana: "そく", descr: "footwear" },
 		{ kanji: "軒", kana: "けん", descr: "houses" },
+		{ kanji: "杯", kana: "はい", descr: "cupfulls" },
+		{ kanji: "円", kana: "えん", descr: "yen" },
 	];
 
 	for (let i = 0; i < 10; ++i) {
